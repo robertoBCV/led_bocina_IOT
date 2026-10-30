@@ -1,0 +1,181 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Home IoT</title>
+  <link rel="stylesheet" href="{% static 'control/css/dashboard.css' %}">
+  <script src="{% static 'control/js/dashboard.js' %}?v=11" defer></script>
+</head>
+<body>
+  <div class="app">
+    <!-- =========================
+       CABECERA
+    ========================== -->
+    <header class="header">
+      <div>
+        <span class="subtitulo">DOMÓTICA Practica 02 led y Bocina</span>
+        <h1>Smart Home</h1>
+        <p>Control de iluminación IoT</p>
+      </div>
+
+      <div class="arduino-info">
+        <div class="arduino-icon">A</div>
+        <div>
+          <strong>Arduino Mega</strong>
+          <span>Control serial COM6</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- CSRF PARA JAVASCRIPT -->
+    <form id="csrf-form" style="display:none;">{% csrf_token %}</form>
+
+    <!-- =========================
+       RESUMEN
+    ========================== -->
+    <section class="resumen">
+      <div class="resumen-item">
+        <span>Dispositivos</span>
+        <strong id="total-dispositivos">
+          {{ leds|length|add:bocinas|length }}
+        </strong>
+      </div>
+
+      <div class="resumen-item">
+        <span>Encendidos</span>
+        <strong id="total-encendidos">0</strong>
+      </div>
+
+      <div class="resumen-item">
+        <span>Apagados</span>
+        <strong id="total-apagados">0</strong>
+      </div>
+    </section>
+
+    <!-- =========================
+       ILUMINACIÓN Y ACTUADORES
+    ========================== -->
+    <section class="seccion">
+      <div class="seccion-titulo">
+        <div>
+          <span class="subtitulo">CONTROL</span>
+          <h2>Iluminación</h2>
+        </div>
+      </div>
+
+      <!-- Grid de LEDs -->
+      <div class="grid-leds">
+        {% for led in leds %}
+        <article class="tarjeta-led" id="card-{{ led.codigo }}" style="--led-color: {{ led.color_hex }};">
+          <div class="tarjeta-superior">
+            <div class="bombilla {% if led.estado_actual %}bombilla-on{% endif %}" id="bombilla-{{ led.codigo }}">
+              <div class="bombilla-centro"></div>
+            </div>
+
+            <span class="badge-estado {% if led.estado_actual %}badge-on{% else %}badge-off{% endif %}" id="badge-{{ led.codigo }}">
+              {% if led.estado_actual %}ENCENDIDO{% else %}APAGADO{% endif %}
+            </span>
+          </div>
+
+          <div class="info-led">
+            <h3>{{ led.nombre }}</h3>
+            <p>{{ led.color }} · Pin {{ led.pin }}</p>
+          </div>
+
+          <button class="boton-led {% if led.estado_actual %}boton-apagar{% else %}boton-encender{% endif %}"
+                  id="boton-led-{{ led.codigo }}" 
+                  data-tipo="led" 
+                  data-codigo="{{ led.codigo }}" 
+                  data-estado="{% if led.estado_actual %}1{% else %}0{% endif %}">
+            {% if led.estado_actual %}Apagar{% else %}Encender{% endif %}
+          </button>
+        </article>
+        {% endfor %}
+      </div>
+
+      <!-- Grid de Bocinas -->
+      <div class="grid-leds">
+        {% for bocina in bocinas %}
+        <article class="tarjeta-led" id="card-{{ bocina.codigo }}" style="--led-color: #a78bfa;">
+          <div class="tarjeta-superior">
+            <div class="bombilla {% if bocina.estado_actual %}bombilla-on{% endif %}" id="bombilla-{{ bocina.codigo }}">
+              <div class="bombilla-centro"></div>
+            </div>
+
+            <span class="badge-estado {% if bocina.estado_actual %}badge-on{% else %}badge-off{% endif %}" id="badge-{{ bocina.codigo }}">
+              {% if bocina.estado_actual %}ENCENDIDO{% else %}APAGADO{% endif %}
+            </span>
+          </div>
+
+          <div class="info-led">
+            <h3>{{ bocina.nombre }}</h3>
+            <p>· Pin {{ bocina.pin }}</p>
+          </div>
+
+          <button type="button" 
+                  class="boton-led {% if bocina.estado_actual %}boton-apagar{% else %}boton-encender{% endif %}" 
+                  id="boton-bocina-{{ bocina.codigo }}" 
+                  data-tipo="bocina" 
+                  data-codigo="{{ bocina.codigo }}" 
+                  data-estado="{% if bocina.estado_actual %}1{% else %}0{% endif %}">
+            {% if bocina.estado_actual %}Apagar{% else %}Encender{% endif %}
+          </button>
+        </article>
+        {% endfor %}
+      </div>
+    </section>
+
+    <!-- =========================
+       HISTORIAL
+    ========================== -->
+    <section class="seccion historial-card">
+      <div class="seccion-titulo">
+        <div>
+          <span class="subtitulo">ACTIVIDAD</span>
+          <h2>Historial</h2>
+        </div>
+        <span class="actualizacion">Actualización automática</span>
+      </div>
+
+      <div class="tabla-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th>Fecha y hora</th>
+              <th>Dispositivo</th>
+              <th>Estado</th>
+              <th>Origen</th>
+            </tr>
+          </thead>
+          <tbody id="historial">
+            {% for evento in eventos %}
+            <tr>
+              <td>{{ evento.fecha|date:"d/m/Y H:i:s" }}</td>
+              <td>{{ evento.led.nombre }}</td>
+              <td>
+                {% if evento.estado %}
+                <span class="estado-tabla on">ENCENDIDO</span>
+                {% else %}
+                <span class="estado-tabla off">APAGADO</span>
+                {% endif %}
+              </td>
+              <td>
+                <span class="origen">
+                  {% if evento.origen == "BOTON" %}BOTÓN{% else %}{{ evento.origen }}{% endif %}
+                </span>
+              </td>
+            </tr>
+            {% empty %}
+            <tr id="sin-eventos">
+              <td colspan="4">Todavía no existen eventos registrados.</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

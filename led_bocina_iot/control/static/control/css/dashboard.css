@@ -1,0 +1,384 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --fondo: #f4f7fb;
+  --blanco: #ffffff;
+  --texto: #162033;
+  --texto-secundario: #718096;
+  --borde: #e5eaf1;
+  --oscuro: #172033;
+  --verde: #22c55e;
+  --rojo: #ef4444;
+}
+
+body {
+  font-family: Inter, Arial, Helvetica, sans-serif;
+  background: var(--fondo);
+  color: var(--texto);
+  min-height: 100vh;
+}
+
+.app {
+  width: min(1200px, calc(100% - 40px));
+  margin: auto;
+  padding: 40px 0 60px;
+}
+
+/* =========================
+  HEADER
+========================= */
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 30px;
+  margin-bottom: 35px;
+}
+
+.subtitulo {
+  display: block;
+  font-size: 11px;
+  font-weight: 800;
+  letter-spacing: 2px;
+  color: #64748b;
+  margin-bottom: 7px;
+}
+
+.header h1 {
+  font-size: 36px;
+  letter-spacing: -1px;
+}
+
+.header p {
+  margin-top: 6px;
+  color: var(--texto-secundario);
+}
+
+.arduino-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 13px 18px;
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  box-shadow: 0 5px 20px rgba(21, 31, 50, 0.05);
+}
+
+.arduino-info strong {
+  display: block;
+  font-size: 14px;
+}
+
+.arduino-info span {
+  display: block;
+  color: var(--texto-secundario);
+  font-size: 12px;
+  margin-top: 3px;
+}
+
+.arduino-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--oscuro);
+  color: white;
+  font-weight: bold;
+  font-size: 18px;
+}
+
+/* =========================
+  RESUMEN
+========================= */
+.resumen {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 18px;
+  margin-bottom: 40px;
+}
+
+.resumen-item {
+  padding: 20px;
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 16px;
+  box-shadow: 0 6px 20px rgba(21, 31, 50, 0.04);
+}
+
+.resumen-item span {
+  color: var(--texto-secundario);
+  font-size: 13px;
+}
+
+.resumen-item strong {
+  display: block;
+  margin-top: 7px;
+  font-size: 28px;
+}
+
+/* =========================
+  SECCIONES
+========================= */
+.seccion {
+  margin-top: 40px;
+}
+
+.seccion-titulo {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.seccion-titulo h2 {
+  font-size: 25px;
+}
+
+/* =========================
+  LED CARDS
+========================= */
+.grid-leds {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 22px;
+}
+
+.tarjeta-led {
+  background: white;
+  border: 1px solid var(--borde);
+  border-radius: 20px;
+  padding: 24px;
+  box-shadow: 0 8px 30px rgba(21, 31, 50, 0.05);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.tarjeta-led:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 14px 40px rgba(21, 31, 50, 0.09);
+}
+
+.tarjeta-superior {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* =========================
+  BOMBILLA
+========================= */
+.bombilla {
+  width: 58px;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 17px;
+  background: #edf1f5;
+  transition: 0.3s;
+}
+
+.bombilla-centro {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #aab4c1;
+  transition: 0.3s;
+}
+
+.bombilla-on {
+  background: color-mix(in srgb, var(--led-color) 12%, white);
+}
+
+.bombilla-on .bombilla-centro {
+  background: var(--led-color);
+  box-shadow: 0 0 22px var(--led-color);
+}
+
+/* =========================
+  BADGE
+========================= */
+.badge-estado {
+  border-radius: 30px;
+  padding: 7px 11px;
+  font-size: 10px;
+  font-weight: 800;
+  letter-spacing: 0.6px;
+}
+
+.badge-on {
+  background: #dcfce7;
+  color: #15803d;
+}
+
+.badge-off {
+  background: #eef2f7;
+  color: #64748b;
+}
+
+/* =========================
+  INFO
+========================= */
+.info-led {
+  margin: 25px 0 23px;
+}
+
+.info-led h3 {
+  font-size: 20px;
+}
+
+.info-led p {
+  color: var(--texto-secundario);
+  font-size: 13px;
+  margin-top: 6px;
+}
+
+/* =========================
+  BOTONES
+========================= */
+.boton-led {
+  width: 100%;
+  border: none;
+  border-radius: 12px;
+  padding: 13px 15px;
+  font-size: 14px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+.boton-encender {
+  background: var(--oscuro);
+  color: white;
+}
+
+.boton-encender:hover {
+  background: #26334a;
+}
+
+.boton-apagar {
+  background: #eef2f7;
+  color: #334155;
+}
+
+.boton-apagar:hover {
+  background: #e0e6ed;
+}
+
+.boton-led:disabled {
+  cursor: not-allowed;
+  opacity: 0.55;
+}
+
+/* =========================
+  HISTORIAL
+========================= */
+.historial-card {
+  background: white;
+  padding: 25px;
+  border-radius: 20px;
+  border: 1px solid var(--borde);
+  box-shadow: 0 8px 30px rgba(21, 31, 50, 0.05);
+}
+
+.actualizacion {
+  font-size: 12px;
+  color: var(--texto-secundario);
+}
+
+.tabla-wrapper {
+  overflow-x: auto;
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th {
+  color: #718096;
+  font-size: 11px;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+th, td {
+  text-align: left;
+  padding: 15px;
+  border-bottom: 1px solid #edf1f5;
+}
+
+td {
+  font-size: 13px;
+}
+
+.estado-tabla {
+  display: inline-block;
+  font-weight: 700;
+  font-size: 11px;
+}
+
+.estado-tabla.on {
+  color: #16a34a;
+}
+
+.estado-tabla.off {
+  color: #64748b;
+}
+
+.origen {
+  padding: 5px 9px;
+  border-radius: 8px;
+  background: #f1f5f9;
+  color: #475569;
+  font-size: 10px;
+  font-weight: 700;
+}
+
+/* =========================
+  RESPONSIVE
+========================= */
+@media (max-width: 850px) {
+  .grid-leds {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  .resumen {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (max-width: 600px) {
+  .app {
+    width: calc(100% - 28px);
+    padding-top: 25px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header h1 {
+    font-size: 30px;
+  }
+
+  .grid-leds {
+    grid-template-columns: 1fr;
+  }
+
+  .resumen {
+    grid-template-columns: 1fr;
+  }
+
+  .arduino-info {
+    width: 100%;
+  }
+}
